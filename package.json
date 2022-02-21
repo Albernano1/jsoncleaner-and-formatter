@@ -3,6 +3,8 @@
 	"displayName": "WJsonCleaner and formatter",
 	"description": "This extension aims at easily cleaning and formatting JSON files we may found daily working on our project.",
 	"version": "0.0.1",
+	"publisher": "Alberto Sánchez Merino",
+	"repository": "https://github.com/Albernano1/wjsoncleaner-and-formatter.git",
 	"engines": {
 		"vscode": "^1.64.0"
 	},
@@ -10,20 +12,38 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:wjsoncleaner-and-formatter.helloWorld"
+        "onCommand:wjsoncleaner-and-formatter.helloWorld",
+		"onCommand:wjsoncleaner-and-formatter.cleanJson",
+		"onCommand:wjsoncleaner-and-formatter.formatJson",
+		"onCommand:wjsoncleaner-and-formatter.cleanAndFormatJson"
 	],
-	"main": "./extension.js",
+	"main": "src/extension.js",
 	"contributes": {
 		"commands": [{
             "command": "wjsoncleaner-and-formatter.helloWorld",
             "title": "Hello World"
 
+		},
+		{
+			"command": "wjsoncleaner-and-formatter.cleanJson",
+			"title": "Clean Json"
+		},
+		{
+			"command": "wjsoncleaner-and-formatter.formatJson",
+			"title": "Format Json"			
+		},
+		{
+			"command": "wjsoncleaner-and-formatter.cleanAndFormatJson",
+			"title": "Clean & Format"			
 		}]
 	},
 	"scripts": {
 		"lint": "eslint .",
 		"pretest": "npm run lint",
-		"test": "node ./test/runTest.js"
+		"test": "node ./test/runTest.js",
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {
         "@types/vscode": "^1.64.0",

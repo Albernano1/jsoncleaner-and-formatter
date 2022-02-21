@@ -17,14 +17,23 @@ function activate(context) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('wjsoncleaner-and-formatter.helloWorld', function () {
+	let disposableHelloWorld = vscode.commands.registerCommand('wjsoncleaner-and-formatter.helloWorld', function () {
 		// The code you place here will be executed every time your command is executed
 
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from WJsonCleaner and formatter!');
+		vscode.window.showInformationMessage(' WJsonCleaner and formatter Activated!');
 	});
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(disposableHelloWorld);
+
+	let disposableCleanJson = vscode.commands.registerCommand('wjsoncleaner-and-formatter.cleanJson', function () {
+		// The code you place here will be executed every time your command is executed
+
+		// Display a message box to the user
+		vscode.window.showInformationMessage(' Cleaning Json File ');
+	});
+
+	context.subscriptions.push(disposableCleanJson);
 }
 
 // this method is called when your extension is deactivated
