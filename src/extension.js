@@ -46,6 +46,8 @@ function activate(context) {
 
 		// Display a message box to the user
 		vscode.window.showInformationMessage(' Cleaning Json File ');
+
+		cleanJson();
 	});
 
 	context.subscriptions.push(disposableCleanJson);
@@ -112,7 +114,7 @@ function cleanJson(){
 	//3 set text on the window
 
 	activeTextEditor.edit(editBuilder => {
-		editBuilder.replace(activeTextEditor.document.getText(), text);
+		editBuilder.replace(text);
 	})
 }
 
