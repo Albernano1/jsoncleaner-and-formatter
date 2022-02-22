@@ -111,7 +111,9 @@ function cleanJson(){
 
 	//3 set text on the window
 
-	vscode.window.activeTextEditor.document
+	activeTextEditor.edit(editBuilder => {
+		editBuilder.replace(activeTextEditor.document.getText(), text);
+	})
 }
 
 module.exports = {
