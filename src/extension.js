@@ -2,6 +2,17 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
+/**
+ * @description "Actual text Editor, declared to be globally used"
+ */
+let activeTextEditor;
+
+/**
+ * @description "Actual text Editor, declared to be globally used"
+ */
+let activeFilePath;
+
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 
@@ -24,6 +35,10 @@ function activate(context) {
 		vscode.window.showInformationMessage(' WJsonCleaner and formatter Activated!');
 	});
 
+	//Initialize the extension
+	// 1 - Set text editor and file
+	getActiveTextEditorAndFile();
+
 	context.subscriptions.push(disposableHelloWorld);
 
 	let disposableCleanJson = vscode.commands.registerCommand('wjsoncleaner-and-formatter.cleanJson', function () {
@@ -38,6 +53,66 @@ function activate(context) {
 
 // this method is called when your extension is deactivated
 function deactivate() {}
+
+/**
+ * @description "Sets the text editor and current file"
+ * @returns nothing
+ */
+function getActiveTextEditorAndFile(){
+
+	// Calls Vs to get the text editor being used
+	activeTextEditor = vscode.window.activeTextEditor;
+
+	if (!activeTextEditor){
+		return;
+	}
+
+	activeFilePath = vscode.workspace.asRelativePath(
+		activeTextEditor.document.uri
+	  );
+}
+
+/**
+ * @description "Cleans the current file"
+ * @returns nothing
+ */
+function cleanJson(){
+	//1 get actual editor and file
+	getActiveTextEditorAndFile();
+
+	//2 access text
+
+	let text = vscode.window.activeTextEditor.document.getText();
+
+	//;///";";
+	text.replaceAll("///*", "*");
+	//;/";";
+	text.replaceAll("/\"","\"");
+	//;"{;{;
+	text.replaceAll("\"{","{");
+	//;}";};
+	text.replaceAll("}\"","}");
+	//;"\[;\[;
+	text.replaceAll("\"[","[");
+	//;\]";\];
+	text.replaceAll("]\"","}");
+	//;///r///n; ;
+	text.replaceAll("///r///n"," ");
+	//;///n; ;
+	text.replaceAll("///n"," ");
+	//;//r//n; ;
+	text.replaceAll("//r//n"," ");
+	//;//n; ;
+	text.replaceAll("//n"," ");
+	//;/r/n; ;
+	text.replaceAll("/r/n"," ");
+	//;/n; ;
+	text.replaceAll("/n"," ");
+
+	//3 set text on the window
+
+	vscode.window.activeTextEditor.document
+}
 
 module.exports = {
 	activate,
