@@ -26,15 +26,15 @@
 		},
 		{
 			"command": "wjsoncleaner-and-formatter.cleanJson",
-			"title": "Clean Json"
+			"title": "WJCF - Clean Json"
 		},
 		{
 			"command": "wjsoncleaner-and-formatter.formatJson",
-			"title": "Format Json"			
+			"title": "WJCF - Format Json"			
 		},
 		{
 			"command": "wjsoncleaner-and-formatter.cleanAndFormatJson",
-			"title": "Clean & Format"			
+			"title": "WJCF - Clean & Format"			
 		}]
 	},
 	"scripts": {

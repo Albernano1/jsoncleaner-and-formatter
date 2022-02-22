@@ -7,12 +7,6 @@ const vscode = require('vscode');
  */
 let activeTextEditor;
 
-/**
- * @description "Actual text Editor, declared to be globally used"
- */
-let activeFilePath;
-
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 
@@ -35,87 +29,148 @@ function activate(context) {
 		vscode.window.showInformationMessage(' WJsonCleaner and formatter Activated!');
 	});
 
-	//Initialize the extension
-	// 1 - Set text editor and file
-	getActiveTextEditorAndFile();
-
-	context.subscriptions.push(disposableHelloWorld);
-
 	let disposableCleanJson = vscode.commands.registerCommand('wjsoncleaner-and-formatter.cleanJson', function () {
 		// The code you place here will be executed every time your command is executed
+		getActiveTextEditorAndFile();
+		cleanJson();
 
 		// Display a message box to the user
 		vscode.window.showInformationMessage(' Cleaning Json File ');
 
-		cleanJson();
 	});
 
+	let disposableFormatJson = vscode.commands.registerCommand('wjsoncleaner-and-formatter.formatJson', function () {
+		// The code you place here will be executed every time your command is executed
+		getActiveTextEditorAndFile();
+		formatJson();
+
+		// Display a message box to the user
+		vscode.window.showInformationMessage(' Formatting Json File ');
+
+	});
+
+	let disposableCleanAndFormatJson = vscode.commands.registerCommand('wjsoncleaner-and-formatter.cleanAndFormatJson', function () {
+		// The code you place here will be executed every time your command is executed
+		getActiveTextEditorAndFile();
+		cleanAndFormatJson();
+
+		// Display a message box to the user
+		vscode.window.showInformationMessage(' Cleaning & Formatting Json File ');
+
+	});
+
+	context.subscriptions.push(disposableHelloWorld);
 	context.subscriptions.push(disposableCleanJson);
+	context.subscriptions.push(disposableFormatJson);
+	context.subscriptions.push(disposableCleanAndFormatJson);
+
+
 }
 
 // this method is called when your extension is deactivated
-function deactivate() {}
+function deactivate() { }
 
 /**
  * @description "Sets the text editor and current file"
  * @returns nothing
  */
-function getActiveTextEditorAndFile(){
+function getActiveTextEditorAndFile() {
 
 	// Calls Vs to get the text editor being used
 	activeTextEditor = vscode.window.activeTextEditor;
 
-	if (!activeTextEditor){
+	if (!activeTextEditor) {
 		return;
 	}
-
-	activeFilePath = vscode.workspace.asRelativePath(
-		activeTextEditor.document.uri
-	  );
 }
 
 /**
  * @description "Cleans the current file"
  * @returns nothing
  */
-function cleanJson(){
-	//1 get actual editor and file
-	getActiveTextEditorAndFile();
+function cleanJson() {
+	//1 get actual editor and file - Update done first outside
+	//getActiveTextEditorAndFile();
 
-	//2 access text
-
+	//2 Modify
 	let text = vscode.window.activeTextEditor.document.getText();
 
+	let htmlregex1 = RegExp(/\/https[\S]*\/,/);
+	let matches = text.match(htmlregex1);
+
+	if (matches.length >= 1){
+		matches.forEach(element => {
+
+			//first and last char are going to be replaced by ""
+			let modified = element.replace(RegExp(/\//), '"');
+			modified = modified.concat(element.substring(0, element.length - 1), '"');
+	
+			text = text.replaceAll(element, modified);
+	
+		});
+	}
+	
+	//;///*;*;
+	text = text.replaceAll("///*", "*");
 	//;///";";
-	text.replaceAll("///*", "*");
+	text = text.replaceAll("///\"", '"')
+	//;//";";
+	text = text.replaceAll("//\"", '"')
 	//;/";";
-	text.replaceAll("/\"","\"");
+	text = text.replaceAll("/\"", "\"");
 	//;"{;{;
-	text.replaceAll("\"{","{");
+	text = text.replaceAll("\"{", "{");
 	//;}";};
-	text.replaceAll("}\"","}");
+	text = text.replaceAll("}\"", "}");
 	//;"\[;\[;
-	text.replaceAll("\"[","[");
+	text = text.replaceAll("\"[", "[");
 	//;\]";\];
-	text.replaceAll("]\"","}");
+	text = text.replaceAll("]\"", "}");
 	//;///r///n; ;
-	text.replaceAll("///r///n"," ");
+	text = text.replaceAll("///r///n", " ");
 	//;///n; ;
-	text.replaceAll("///n"," ");
+	text = text.replaceAll("///n", " ");
 	//;//r//n; ;
-	text.replaceAll("//r//n"," ");
+	text = text.replaceAll("//r//n", " ");
 	//;//n; ;
-	text.replaceAll("//n"," ");
+	text = text.replaceAll("//n", " ");
 	//;/r/n; ;
-	text.replaceAll("/r/n"," ");
+	text = text.replaceAll("/r/n", " ");
 	//;/n; ;
-	text.replaceAll("/n"," ");
+	text = text.replaceAll("/n", " ");
 
 	//3 set text on the window
 
+	//Creating a new range with startLine, startCharacter & endLine, endCharacter.
+	let range = new vscode.Range(0, 0, vscode.window.activeTextEditor.document.lineCount, 0);
+
+	let validatedRange = vscode.window.activeTextEditor.document.validateRange(range);
+
 	activeTextEditor.edit(editBuilder => {
-		editBuilder.replace(text);
+		editBuilder.replace(validatedRange, text);
 	})
+}
+
+/**
+ * @description "Formats the current File"
+ * @returns nothing
+ */
+function formatJson() {
+	//MUAHHAHAHAHAHHAHAHAHHAHAH
+	let success = vscode.commands.executeCommand('vscode.executeFormatDocumentProvider', vscode.window.activeTextEditor.document.uri);
+
+}
+
+/**
+ * @description "Cleans and formats the current File"
+ * @returns nothing
+ */
+function cleanAndFormatJson() {
+
+	//Just Call the two functions
+	cleanJson();
+	formatJson();
+
 }
 
 module.exports = {
