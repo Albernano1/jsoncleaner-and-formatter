@@ -103,7 +103,7 @@ function cleanJson() {
 
 			//first and last char are going to be replaced by ""
 			let modified = element.replace(RegExp(/\//), '"');
-			modified = modified.concat(element.substring(0, element.length - 1), '"');
+			modified = modified.substring(0, modified.length - 1)+ '",';
 	
 			text = text.replaceAll(element, modified);
 	
@@ -140,7 +140,6 @@ function cleanJson() {
 	text = text.replaceAll("/n", " ");
 
 	//3 set text on the window
-
 	//Creating a new range with startLine, startCharacter & endLine, endCharacter.
 	let range = new vscode.Range(0, 0, vscode.window.activeTextEditor.document.lineCount, 0);
 
@@ -156,8 +155,9 @@ function cleanJson() {
  * @returns nothing
  */
 function formatJson() {
+
 	//MUAHHAHAHAHAHHAHAHAHHAHAH
-	let success = vscode.commands.executeCommand('vscode.executeFormatDocumentProvider', vscode.window.activeTextEditor.document.uri);
+	vscode.commands.executeCommand('vscode.executeFormatDocumentProvider', vscode.window.activeTextEditor.document.uri)
 
 }
 
