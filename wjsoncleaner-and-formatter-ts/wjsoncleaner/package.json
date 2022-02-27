@@ -1,8 +1,10 @@
 {
-  "name": "wjsoncleaner",
+	"name": "wjsoncleaner-and-formatter",
 	"displayName": "WJsonCleaner",
 	"description": "This extension aims at easily cleaning and formatting JSON files we may found daily working on our project.",
-	"version": "0.0.1",
+	"version": "1.0.0",
+	"publisher": "Alberto Sánchez Merino",
+	"repository": "https://github.com/Albernano1/wjsoncleaner-and-formatter.git",
 	"engines": {
 		"vscode": "^1.64.0"
 	},
