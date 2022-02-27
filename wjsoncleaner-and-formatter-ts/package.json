@@ -1,5 +1,5 @@
 {
-	"name": "wjsoncleaner-and-formatter",
+	"name": "wjsoncleaner",
 	"displayName": "WJsonCleaner",
 	"description": "This extension aims at easily cleaning and formatting JSON files we may found daily working on our project.",
 	"version": "1.0.0",
@@ -13,13 +13,13 @@
 	],
 	"activationEvents": [
         "onCommand:wjsoncleaner.helloWorld"
-		,"onCommand:wjsoncleaner-and-formatter.cleanJson"
+		,"onCommand:wjsoncleaner.cleanJson"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "wjsoncleaner-and-formatter.cleanJson",
+				"command": "wjsoncleaner.cleanJson",
 				"title": "WJC - Clean Json"
 			}
 		]

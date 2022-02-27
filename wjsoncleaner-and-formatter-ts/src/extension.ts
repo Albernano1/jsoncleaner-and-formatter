@@ -5,12 +5,12 @@ import * as vscode from 'vscode';
 /**
  * @description "Actual text Editor, declared to be globally used"
  */
- let activeTextEditor: vscode.TextEditor | undefined;
- 
+let activeTextEditor: vscode.TextEditor | undefined;
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	
+
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "wjsoncleaner" is now active!');
@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable);
 
-	let disposableCleanJson = vscode.commands.registerCommand('wjsoncleaner-and-formatter.cleanJson', () => {
+	let disposableCleanJson = vscode.commands.registerCommand('wjsoncleaner.cleanJson', () => {
 		// The code you place here will be executed every time your command is executed
 		getActiveTextEditorAndFile();
 		cleanJson();
@@ -35,19 +35,19 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage(' Cleaning Json File ');
 
 	});
-	
+
 	context.subscriptions.push(disposableCleanJson);
 
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
 
 /**
  * @description "Sets the text editor and current file"
  * @returns nothing
  */
- function getActiveTextEditorAndFile() {
+function getActiveTextEditorAndFile() {
 
 	// Calls Vs to get the text editor being used
 	activeTextEditor = vscode.window.activeTextEditor;
@@ -61,7 +61,7 @@ export function deactivate() {}
  * @description "Cleans the current file"
  * @returns nothing
  */
- function cleanJson() {
+function cleanJson() {
 	//1 get actual editor and file - Update done first outside
 	//getActiveTextEditorAndFile();
 
@@ -79,46 +79,46 @@ export function deactivate() {}
 		return;
 	}
 
-	if (matches.length >= 1){
+	if (matches.length >= 1) {
 		matches.forEach(element => {
 
 			//first and last char are going to be replaced by ""
 			let modified = element.replace(RegExp(/\//), '"');
-			modified = modified.substring(0, modified.length - 1)+ '",';
-	
+			modified = modified.substring(0, modified.length - 1) + '",';
+
 			text = text.replace(element, modified);
-	
+
 		});
 	}
-	
+
 	//;///*;*;
-	text = text.replace("///*", "*");
+	text = text.replaceAll("///*", "*");
 	//;///";";
-	text = text.replace("///\"", '"');
+	text = text.replaceAll("///\"", '"');
 	//;//";";
-	text = text.replace("//\"", '"');
+	text = text.replaceAll("//\"", '"');
 	//;/";";
-	text = text.replace("/\"", "\"");
+	text = text.replaceAll("/\"", "\"");
 	//;"{;{;
-	text = text.replace("\"{", "{");
+	text = text.replaceAll("\"{", "{");
 	//;}";};
-	text = text.replace("}\"", "}");
+	text = text.replaceAll("}\"", "}");
 	//;"\[;\[;
-	text = text.replace("\"[", "[");
+	text = text.replaceAll("\"[", "[");
 	//;\]";\];
-	text = text.replace("]\"", "}");
+	text = text.replaceAll("]\"", "}");
 	//;///r///n; ;
-	text = text.replace("///r///n", " ");
+	text = text.replaceAll("///r///n", " ");
 	//;///n; ;
-	text = text.replace("///n", " ");
+	text = text.replaceAll("///n", " ");
 	//;//r//n; ;
-	text = text.replace("//r//n", " ");
+	text = text.replaceAll("//r//n", " ");
 	//;//n; ;
-	text = text.replace("//n", " ");
+	text = text.replaceAll("//n", " ");
 	//;/r/n; ;
-	text = text.replace("/r/n", " ");
+	text = text.replaceAll("/r/n", " ");
 	//;/n; ;
-	text = text.replace("/n", " ");
+	text = text.replaceAll("/n", " ");
 
 	//3 set text on the window
 	//Creating a new range with startLine, startCharacter & endLine, endCharacter.

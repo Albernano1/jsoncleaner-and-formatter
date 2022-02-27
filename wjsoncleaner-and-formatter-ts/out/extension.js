@@ -23,7 +23,7 @@ function activate(context) {
         vscode.window.showInformationMessage('Hello World from WJsonCleaner!');
     });
     context.subscriptions.push(disposable);
-    let disposableCleanJson = vscode.commands.registerCommand('wjsoncleaner-and-formatter.cleanJson', () => {
+    let disposableCleanJson = vscode.commands.registerCommand('wjsoncleaner.cleanJson', () => {
         // The code you place here will be executed every time your command is executed
         getActiveTextEditorAndFile();
         cleanJson();
@@ -73,33 +73,33 @@ function cleanJson() {
         });
     }
     //;///*;*;
-    text = text.replace("///*", "*");
+    text = text.replaceAll("///*", "*");
     //;///";";
-    text = text.replace("///\"", '"');
+    text = text.replaceAll("///\"", '"');
     //;//";";
-    text = text.replace("//\"", '"');
+    text = text.replaceAll("//\"", '"');
     //;/";";
-    text = text.replace("/\"", "\"");
+    text = text.replaceAll("/\"", "\"");
     //;"{;{;
-    text = text.replace("\"{", "{");
+    text = text.replaceAll("\"{", "{");
     //;}";};
-    text = text.replace("}\"", "}");
+    text = text.replaceAll("}\"", "}");
     //;"\[;\[;
-    text = text.replace("\"[", "[");
+    text = text.replaceAll("\"[", "[");
     //;\]";\];
-    text = text.replace("]\"", "}");
+    text = text.replaceAll("]\"", "}");
     //;///r///n; ;
-    text = text.replace("///r///n", " ");
+    text = text.replaceAll("///r///n", " ");
     //;///n; ;
-    text = text.replace("///n", " ");
+    text = text.replaceAll("///n", " ");
     //;//r//n; ;
-    text = text.replace("//r//n", " ");
+    text = text.replaceAll("//r//n", " ");
     //;//n; ;
-    text = text.replace("//n", " ");
+    text = text.replaceAll("//n", " ");
     //;/r/n; ;
-    text = text.replace("/r/n", " ");
+    text = text.replaceAll("/r/n", " ");
     //;/n; ;
-    text = text.replace("/n", " ");
+    text = text.replaceAll("/n", " ");
     //3 set text on the window
     //Creating a new range with startLine, startCharacter & endLine, endCharacter.
     let range = new vscode.Range(0, 0, activeTextEditor.document.lineCount, 0);
