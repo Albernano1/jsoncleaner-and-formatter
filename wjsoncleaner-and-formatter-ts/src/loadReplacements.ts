@@ -4,7 +4,7 @@ import * as fs from 'fs';
  * Read Replacement values present in replacements txt, returns them as an strin array
  */
 
-function loadReplacements(){
+export function loadReplacements(){
 
     let fileContent = fs.readFileSync('replacements.txt','utf8');
 
@@ -19,6 +19,6 @@ function loadReplacements(){
 }
 
 
-module.exports = {
-    loadReplacements: loadReplacements
-  };
+// module.exports = {
+//     loadReplacements: loadReplacements
+//   };

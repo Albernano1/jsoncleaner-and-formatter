@@ -1,7 +1,10 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-let loadReplacements = require('./loadReplacements');
+
+import {loadReplacements} from './loadReplacements';
+
+//let loadReplacements = require('./loadReplacements');
 
 /**
  * @description "Actual text Editor, declared to be globally used"
