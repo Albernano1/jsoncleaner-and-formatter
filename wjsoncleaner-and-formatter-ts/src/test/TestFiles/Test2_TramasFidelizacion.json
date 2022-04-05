@@ -1,0 +1,31 @@
+{
+    "ObjectName": "Request",
+    "CalledMethod": "LoyaltyDiscountQueryTrack",
+    "CalledMethodBaseClass": "TmeISOHelper",
+    "SaleProducts": "[{/"Product/":{/"ProductId/":/"005/",/"UnitPrice/":1.112},/"TotalPrice/":7.01,/"Quantity/":6.304}]",
+    "TransactionAmount": "7.01",
+    "LoyaltyCard": "{/"DiscountType/":/"AU/",/"Pan/":/"6276390013487033012/"}",
+    "DiscountCards": "[]",
+    "CallingTerminalId": "148",
+    "BackendPaymentCard": "{/"CardBin/":/"707883/",/"EncryptMethod/":2,/"Pan/":/"5CF0DE12EFFBE8541A2C45AA2F597A646C23D2BD2744A9138E68CA8493D5FE61/",/"InitializationVector/":/"02331722000000637825112805983235/",/"ExpirationDate/":/"2403/"}",
+    "GigyaId": "6839ecab131246a7979a6559844727af",
+    "WayletTransactionId": "2331722",
+    "DeliveryType": "0"
+}
+
+{
+    "ObjectName": "Response",
+    "CalledMethod": "LoyaltyDiscountQueryTrack",
+    "CalledMethodBaseClass": "TmeISOHelper",
+    "AssociatedDiscountAndLoyalty": "{/"Loyalty/":{/"Card/":{/"EncryptMethod/":0,/"InitializationVector/":null,/"DiscountType/":/"AU/",/"Pan/":/"6276390013487033012/"},/"LoyaltyBySaleProducts/":[{/"Product/":{/"Product/":{/"ProductId/":/"005/",/"UnitPrice/":1.112},/"TotalPrice/":7.01,/"Quantity/":6.304},/"BasicPoints/":0.0,/"PromoPoints/":0.0,/"ProductCodeAsociatedToPoints/":/"005/",/"ProductCodePromotionPoints/":0,/"SubproductCodeSubpromotionPoints/":0}],/"TotalPointsToGrant/":0.0},/"Discounts/":[]}",
+    "TransactionId": 250,
+    "QueryDateTime": "/"2022-03-10T13: 15: 01Z/"",
+    "AllowedMarksTable": "",
+    "PromoTickets": "[{/"FootPromoType/":0,/"BarCode/":null,/"BarCodeNumber/":/"/",/"FootTicketPromos/":[{/"Text/":/" Mensaje de prueba Autoclub /",/"FontType/":1},{/"Text/":/" en mensajes de fidelizacion /",/"FontType/":1}]}]",
+    "QueryExecutedCorrectly": true,
+    "ErrorMessages": "null",
+    "HcpDataForTicket": "{/"TransactionId/":250,/"TransactionDateTime/":/"2022-03-10T13: 15: 01Z/",/"AuthorizationNumber/":/"598104/",/"ReferenceNumber/":/"/",/"ResponseRemittanceNumber/":/"57/",/"ResponseRemittanceDate/":/"2022-03-10T00: 00: 00Z/",/"ResponseTurnNumber/":/"01/",/"ResponseTurnDate/":/"2022-03-10T09: 15: 34Z/",/"TerminalData/":{/"Id/":148,/"TerminalType/":5,/"Description/":/"Waylet pista/",/"TerminalNumber/":51,/"TurnNumber/":/"01/",/"TurnDateTime/":/"2022-03-10T09: 15: 34+00: 00/",/"Shop/":{/"Id/":/"183133529/",/"LicenseNumber/":null,/"Address/":/"CR N-332, PK. 72,
+    40 MI/",/"PostalCode/":/"03140/",/"Province/":/"ALICANTE/",/"Locality/":/"GUARDAMAR DE SEGURA/",/"StationCode/":1,/"CountryCode/":724,/"RemittanceNumber/":/"57/",/"AccountingRemittanceDate/":/"2022-03-10T00: 00: 00+00: 00/",/"CommerceName/":/"EXPOGAS SL/",/"CommerceCompanyName/":/"EXPOGAS, S.L./",/"TimeZoneId/":/"Romance Standard Time/",/"PartitionKey/":183133529},/"CountryData/":{/"Id/":/"724/",/"CountryName/":/"Spain/",/"AcquirerId/":/"000220/",/"CurrencyCode/":978,/"PartitionKey/":0},/"OperationNumber/":13}}",
+    "Message": "null",
+    "ErrorCode": "null"
+}

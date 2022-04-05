@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+let loadReplacements = require('./loadReplacements');
 
 /**
  * @description "Actual text Editor, declared to be globally used"
@@ -62,15 +63,23 @@ function getActiveTextEditorAndFile() {
  * @returns nothing
  */
 function cleanJson() {
-	//1 get actual editor and file - Update done first outside
-	//getActiveTextEditorAndFile();
+	
+	//Load replacements from file
+	let replacements:string[][];
+	try {
+	
+		replacements = loadReplacements();
 
-	if (!activeTextEditor) {
+	
+
+	if (!vscode.window.activeTextEditor) {
+		// Display a message box to the user
+		vscode.window.showWarningMessage(' No active text editor in use ');
 		return;
 	}
 
 	//2 Modify
-	let text = activeTextEditor.document.getText();
+	let text = vscode.window.activeTextEditor.document.getText();
 
 	let htmlregex1 = RegExp(/\/https[\S]*\/,/);
 	let matches = text.match(htmlregex1);
@@ -91,42 +100,54 @@ function cleanJson() {
 		});
 	}
 
-	//;///*;*;
-	text = text.replaceAll("///*", "*");
-	//;///";";
-	text = text.replaceAll("///\"", '"');
-	//;//";";
-	text = text.replaceAll("//\"", '"');
-	//;/";";
-	text = text.replaceAll("/\"", "\"");
-	//;"{;{;
-	text = text.replaceAll("\"{", "{");
-	//;}";};
-	text = text.replaceAll("}\"", "}");
-	//;"\[;\[;
-	text = text.replaceAll("\"[", "[");
-	//;\]";\];
-	text = text.replaceAll("]\"", "}");
-	//;///r///n; ;
-	text = text.replaceAll("///r///n", " ");
-	//;///n; ;
-	text = text.replaceAll("///n", " ");
-	//;//r//n; ;
-	text = text.replaceAll("//r//n", " ");
-	//;//n; ;
-	text = text.replaceAll("//n", " ");
-	//;/r/n; ;
-	text = text.replaceAll("/r/n", " ");
-	//;/n; ;
-	text = text.replaceAll("/n", " ");
+	replacements.forEach(element => {
+		text=text.replaceAll(element[0],element[1]);
+	});
 
 	//3 set text on the window
 	//Creating a new range with startLine, startCharacter & endLine, endCharacter.
-	let range = new vscode.Range(0, 0, activeTextEditor.document.lineCount, 0);
+	let range = new vscode.Range(0, 0, vscode.window.activeTextEditor.document.lineCount, 0);
 
-	let validatedRange = activeTextEditor.document.validateRange(range);
+	let validatedRange = vscode.window.activeTextEditor.document.validateRange(range);
 
-	activeTextEditor.edit(editBuilder => {
+	vscode.window.activeTextEditor.edit(editBuilder => {
 		editBuilder.replace(validatedRange, text);
 	});
+
+	} catch (error) {
+		vscode.window.showWarningMessage(" Couldn't load replacement values ");
+	}
+	
+	// //;///*;*;
+	// text = text.replaceAll("///*", "*");
+	// //;///";";
+	// text = text.replaceAll("///\"", '"');
+	// //;//";";
+	// text = text.replaceAll("//\"", '"');
+	// //;/";";
+	// text = text.replaceAll("/\"", "\"");
+	// //;"{;{;
+	// text = text.replaceAll("\"{", "{");
+	// //;}";};
+	// text = text.replaceAll("}\"", "}");
+	// //;"\[;\[;
+	// text = text.replaceAll("\"[", "[");
+	// //;\]";\];
+	// text = text.replaceAll("]\"", "}");
+	// //;///r///n; ;
+	// text = text.replaceAll("///r///n", " ");
+	// //;///n; ;
+	// text = text.replaceAll("///n", " ");
+	// //;//r//n; ;
+	// text = text.replaceAll("//r//n", " ");
+	// //;//n; ;
+	// text = text.replaceAll("//n", " ");
+	// //;/r/n; ;
+	// text = text.replaceAll("/r/n", " ");
+	// //;/n; ;
+	// text = text.replaceAll("/n", " ");
+
+	
 }
+
+
