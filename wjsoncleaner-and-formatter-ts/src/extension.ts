@@ -100,7 +100,7 @@ function cleanJson(context: vscode.ExtensionContext) {
 			editBuilder.replace(range, text);
 		});
 
-		vscode.window.showInformationMessage(' File modified ');
+		vscode.window.showInformationMessage(' Execution Completed ');
 
 	} catch (error: any) {
 		console.log("WJC - There has been an error triying to clean the file: "+ error.message);

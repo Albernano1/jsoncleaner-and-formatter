@@ -18,6 +18,7 @@ function loadReplacements(context) {
         return replacements;
     }
     catch (error) {
+        console.log("WJC - There's been an error reading replacement file: " + error.message);
         throw new Error("There's been an error reading replacement file: " + error.message);
     }
 }
