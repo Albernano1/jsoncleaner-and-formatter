@@ -76,9 +76,8 @@ function cleanJson(context: vscode.ExtensionContext) {
 		replacements = loadReplacements(context);
 
 		if (!vscode.window.activeTextEditor) {
-			// Display a message box to the user
-			vscode.window.showWarningMessage(' No active text editor in use ');
-			return;
+			// Handle as error
+			throw new Error('No active text editor in use');
 		}
 
 		//Step 2 - Recover active editor text and apply modifications
@@ -101,10 +100,11 @@ function cleanJson(context: vscode.ExtensionContext) {
 			editBuilder.replace(range, text);
 		});
 
-		vscode.window.showWarningMessage(' File modified ');
+		vscode.window.showInformationMessage(' File modified ');
 
 	} catch (error: any) {
-		vscode.window.showWarningMessage(" There has been an error triying to clean the file: "+error.message);
+		console.log("WJC - There has been an error triying to clean the file: "+ error.message);
+		vscode.window.showErrorMessage(" There has been an error triying to clean the file: "+error.message);
 	}
 }
 
@@ -119,7 +119,7 @@ function htmltextModification(context: vscode.ExtensionContext, text: string):st
 	
 	if (!matches) {
 		//Matches Null, warning and end
-		vscode.window.showWarningMessage(' No matches to modify ');
+		vscode.window.showInformationMessage(' No matches to modify ');
 		return '';
 
 	}else if (matches.length >= 1) {
@@ -132,7 +132,7 @@ function htmltextModification(context: vscode.ExtensionContext, text: string):st
 
 	}else{
 		//No matches, warning and end
-		vscode.window.showWarningMessage(' No matches to modify ');
+		vscode.window.showInformationMessage(' No matches to modify ');
 		return '';
 	}
 

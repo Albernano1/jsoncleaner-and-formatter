@@ -24,6 +24,7 @@ export function loadReplacements(context: vscode.ExtensionContext): string[][] {
     return replacements;
 
     } catch (error: any){
+        console.log("WJC - There's been an error reading replacement file: "+ error.message);
         throw new Error("There's been an error reading replacement file: "+ error.message);
     }
 }
