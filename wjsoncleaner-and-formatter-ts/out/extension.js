@@ -1,9 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
+//@ts-check
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require("vscode");
+const loadReplacements_1 = require("./loadReplacements");
+//let loadReplacements = require('./loadReplacements');
 /**
  * @description "Actual text Editor, declared to be globally used"
  */
@@ -20,13 +23,13 @@ function activate(context) {
     let disposable = vscode.commands.registerCommand('wjsoncleaner.helloWorld', () => {
         // The code you place here will be executed every time your command is executed
         // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World from WJsonCleaner!');
+        vscode.window.showInformationMessage('Hello World from WJsonCleaner TS!');
     });
     context.subscriptions.push(disposable);
     let disposableCleanJson = vscode.commands.registerCommand('wjsoncleaner.cleanJson', () => {
         // The code you place here will be executed every time your command is executed
-        getActiveTextEditorAndFile();
-        cleanJson();
+        getActiveTextEditorAndFile(context);
+        cleanJson(context);
         // Display a message box to the user
         vscode.window.showInformationMessage(' Cleaning Json File ');
     });
@@ -40,7 +43,7 @@ exports.deactivate = deactivate;
  * @description "Sets the text editor and current file"
  * @returns nothing
  */
-function getActiveTextEditorAndFile() {
+function getActiveTextEditorAndFile(context) {
     // Calls Vs to get the text editor being used
     activeTextEditor = vscode.window.activeTextEditor;
     if (!activeTextEditor) {
@@ -51,61 +54,90 @@ function getActiveTextEditorAndFile() {
  * @description "Cleans the current file"
  * @returns nothing
  */
-function cleanJson() {
-    //1 get actual editor and file - Update done first outside
-    //getActiveTextEditorAndFile();
-    if (!activeTextEditor) {
-        return;
+function cleanJson(context) {
+    try {
+        // Step 1 - Load replacements from file
+        let replacements;
+        replacements = (0, loadReplacements_1.loadReplacements)(context);
+        if (!vscode.window.activeTextEditor) {
+            // Display a message box to the user
+            vscode.window.showWarningMessage(' No active text editor in use ');
+            return;
+        }
+        //Step 2 - Recover active editor text and apply modifications
+        let text = vscode.window.activeTextEditor.document.getText();
+        // Step 2.1 - Modify HTML urls
+        text = htmltextModification(context, text);
+        // Step 2.2 - Modify Loaded from text file replacement pairs
+        replacements.forEach(element => {
+            text = text.replaceAll(element[0], element[1]);
+        });
+        //Step 3 - Set text on the window
+        //Creating a new range with startLine, startCharacter & endLine, endCharacter.
+        let range = new vscode.Range(0, 0, vscode.window.activeTextEditor.document.lineCount, 0);
+        range = vscode.window.activeTextEditor.document.validateRange(range);
+        vscode.window.activeTextEditor.edit(editBuilder => {
+            editBuilder.replace(range, text);
+        });
+        vscode.window.showWarningMessage(' File modified ');
     }
-    //2 Modify
-    let text = activeTextEditor.document.getText();
+    catch (error) {
+        vscode.window.showWarningMessage(" There has been an error triying to clean the file: " + error.message);
+    }
+}
+/**
+ * @description "Cleans the current file"
+ * @returns nothing
+ */
+function htmltextModification(context, text) {
     let htmlregex1 = RegExp(/\/https[\S]*\/,/);
     let matches = text.match(htmlregex1);
     if (!matches) {
-        return;
+        //Matches Null, warning and end
+        vscode.window.showWarningMessage(' No matches to modify ');
+        return '';
     }
-    if (matches.length >= 1) {
+    else if (matches.length >= 1) {
         matches.forEach(element => {
-            //first and last char are going to be replaced by ""
+            //First and last char are going to be replaced by ""
             let modified = element.replace(RegExp(/\//), '"');
             modified = modified.substring(0, modified.length - 1) + '",';
             text = text.replace(element, modified);
         });
     }
-    //;///*;*;
-    text = text.replaceAll("///*", "*");
-    //;///";";
-    text = text.replaceAll("///\"", '"');
-    //;//";";
-    text = text.replaceAll("//\"", '"');
-    //;/";";
-    text = text.replaceAll("/\"", "\"");
-    //;"{;{;
-    text = text.replaceAll("\"{", "{");
-    //;}";};
-    text = text.replaceAll("}\"", "}");
-    //;"\[;\[;
-    text = text.replaceAll("\"[", "[");
-    //;\]";\];
-    text = text.replaceAll("]\"", "}");
-    //;///r///n; ;
-    text = text.replaceAll("///r///n", " ");
-    //;///n; ;
-    text = text.replaceAll("///n", " ");
-    //;//r//n; ;
-    text = text.replaceAll("//r//n", " ");
-    //;//n; ;
-    text = text.replaceAll("//n", " ");
-    //;/r/n; ;
-    text = text.replaceAll("/r/n", " ");
-    //;/n; ;
-    text = text.replaceAll("/n", " ");
-    //3 set text on the window
-    //Creating a new range with startLine, startCharacter & endLine, endCharacter.
-    let range = new vscode.Range(0, 0, activeTextEditor.document.lineCount, 0);
-    let validatedRange = activeTextEditor.document.validateRange(range);
-    activeTextEditor.edit(editBuilder => {
-        editBuilder.replace(validatedRange, text);
-    });
+    else {
+        //No matches, warning and end
+        vscode.window.showWarningMessage(' No matches to modify ');
+        return '';
+    }
+    return text;
 }
+// //;///*;*;
+// text = text.replaceAll("///*", "*");
+// //;///";";
+// text = text.replaceAll("///\"", '"');
+// //;//";";
+// text = text.replaceAll("//\"", '"');
+// //;/";";
+// text = text.replaceAll("/\"", "\"");
+// //;"{;{;
+// text = text.replaceAll("\"{", "{");
+// //;}";};
+// text = text.replaceAll("}\"", "}");
+// //;"\[;\[;
+// text = text.replaceAll("\"[", "[");
+// //;\]";\];
+// text = text.replaceAll("]\"", "}");
+// //;///r///n; ;
+// text = text.replaceAll("///r///n", " ");
+// //;///n; ;
+// text = text.replaceAll("///n", " ");
+// //;//r//n; ;
+// text = text.replaceAll("//r//n", " ");
+// //;//n; ;
+// text = text.replaceAll("//n", " ");
+// //;/r/n; ;
+// text = text.replaceAll("/r/n", " ");
+// //;/n; ;
+// text = text.replaceAll("/n", " ");
 //# sourceMappingURL=extension.js.map

@@ -1,3 +1,4 @@
+//@ts-check
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
@@ -32,8 +33,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let disposableCleanJson = vscode.commands.registerCommand('wjsoncleaner.cleanJson', () => {
 		// The code you place here will be executed every time your command is executed
-		getActiveTextEditorAndFile();
-		cleanJson();
+		getActiveTextEditorAndFile(context);
+		cleanJson(context);
 
 		// Display a message box to the user
 		vscode.window.showInformationMessage(' Cleaning Json File ');
@@ -51,7 +52,7 @@ export function deactivate() { }
  * @description "Sets the text editor and current file"
  * @returns nothing
  */
-function getActiveTextEditorAndFile() {
+function getActiveTextEditorAndFile(context: vscode.ExtensionContext) {
 
 	// Calls Vs to get the text editor being used
 	activeTextEditor = vscode.window.activeTextEditor;
@@ -65,63 +66,80 @@ function getActiveTextEditorAndFile() {
  * @description "Cleans the current file"
  * @returns nothing
  */
-function cleanJson() {
+function cleanJson(context: vscode.ExtensionContext) {
 	
-	//Load replacements from file
-	let replacements:string[][];
 	try {
 	
-		replacements = loadReplacements();
-
+		// Step 1 - Load replacements from file
+		let replacements:string[][];
 	
+		replacements = loadReplacements(context);
 
-	if (!vscode.window.activeTextEditor) {
-		// Display a message box to the user
-		vscode.window.showWarningMessage(' No active text editor in use ');
-		return;
+		if (!vscode.window.activeTextEditor) {
+			// Display a message box to the user
+			vscode.window.showWarningMessage(' No active text editor in use ');
+			return;
+		}
+
+		//Step 2 - Recover active editor text and apply modifications
+		let text: string = vscode.window.activeTextEditor.document.getText();
+		
+		// Step 2.1 - Modify HTML urls
+		text = htmltextModification(context, text) ;
+
+		// Step 2.2 - Modify Loaded from text file replacement pairs
+		replacements.forEach(element => {
+			text = text.replaceAll(element[0],element[1]);
+		});
+
+		//Step 3 - Set text on the window
+		//Creating a new range with startLine, startCharacter & endLine, endCharacter.
+		let range: vscode.Range = new vscode.Range(0,0,vscode.window.activeTextEditor.document.lineCount, 0);
+		range = vscode.window.activeTextEditor.document.validateRange(range);
+		
+		vscode.window.activeTextEditor.edit(editBuilder => {
+			editBuilder.replace(range, text);
+		});
+
+		vscode.window.showWarningMessage(' File modified ');
+
+	} catch (error: any) {
+		vscode.window.showWarningMessage(" There has been an error triying to clean the file: "+error.message);
 	}
+}
 
-	//2 Modify
-	let text = vscode.window.activeTextEditor.document.getText();
+/**
+ * @description "Cleans the current file"
+ * @returns nothing
+ */
+function htmltextModification(context: vscode.ExtensionContext, text: string):string{
 
-	let htmlregex1 = RegExp(/\/https[\S]*\/,/);
-	let matches = text.match(htmlregex1);
-
+	let htmlregex1: RegExp = RegExp(/\/https[\S]*\/,/);
+	let matches: RegExpMatchArray | null = text.match(htmlregex1);
+	
 	if (!matches) {
-		return;
-	}
+		//Matches Null, warning and end
+		vscode.window.showWarningMessage(' No matches to modify ');
+		return '';
 
-	if (matches.length >= 1) {
+	}else if (matches.length >= 1) {
 		matches.forEach(element => {
-
-			//first and last char are going to be replaced by ""
+			//First and last char are going to be replaced by ""
 			let modified = element.replace(RegExp(/\//), '"');
 			modified = modified.substring(0, modified.length - 1) + '",';
-
 			text = text.replace(element, modified);
-
 		});
+
+	}else{
+		//No matches, warning and end
+		vscode.window.showWarningMessage(' No matches to modify ');
+		return '';
 	}
 
-	replacements.forEach(element => {
-		text=text.replaceAll(element[0],element[1]);
-	});
+	return text;
+}
 
-	//3 set text on the window
-	//Creating a new range with startLine, startCharacter & endLine, endCharacter.
-	let range = new vscode.Range(0, 0, vscode.window.activeTextEditor.document.lineCount, 0);
-
-	let validatedRange = vscode.window.activeTextEditor.document.validateRange(range);
-
-	vscode.window.activeTextEditor.edit(editBuilder => {
-		editBuilder.replace(validatedRange, text);
-	});
-
-	} catch (error) {
-		vscode.window.showWarningMessage(" Couldn't load replacement values ");
-	}
-	
-	// //;///*;*;
+// //;///*;*;
 	// text = text.replaceAll("///*", "*");
 	// //;///";";
 	// text = text.replaceAll("///\"", '"');
@@ -150,7 +168,5 @@ function cleanJson() {
 	// //;/n; ;
 	// text = text.replaceAll("/n", " ");
 
-	
-}
 
 
