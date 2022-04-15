@@ -20,13 +20,13 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "wjsoncleaner.cleanJson",
-				"title": "WJC - Clean Json"
+				"command": "jsoncleaner.cleanJson",
+				"title": "JC - Clean Json"
 			}
 		],
 		"configuration":[
 			{
-				"title": "WJC(WayletJsonCleaner)",
+				"title": "JC(JsonCleaner)",
 				"properties": {
 					"wjc.textReplacments":{
 						"description": "List of text replacements to do on cleaning process:",
