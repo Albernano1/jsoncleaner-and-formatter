@@ -15,8 +15,8 @@ export function loadReplacements(context: vscode.ExtensionContext): string[][] {
 
         let configuredReplacements: String|undefined ="";
         
-        if (vscode.workspace.getConfiguration('WJC(WayletJsonCleaner).properties').has('wjc.textReplacments')){
-            configuredReplacements = vscode.workspace.getConfiguration('WJC(WayletJsonCleaner).properties').get('wjc.textReplacments');
+        if (vscode.workspace.getConfiguration('JC(WayletJsonCleaner).properties').has('jc.textReplacments')){
+            configuredReplacements = vscode.workspace.getConfiguration('JC(WayletJsonCleaner).properties').get('jc.textReplacments');
         }else{
             throw new Error("Nothing to retrieve from extension configuration");
         }
@@ -40,7 +40,7 @@ export function loadReplacements(context: vscode.ExtensionContext): string[][] {
         return replacements;
 
     } catch (error: any){
-        console.log("WJC - There's been an error reading replacements: "+ error.message);
+        console.log("JC - There's been an error reading replacements: "+ error.message);
         throw new Error("There's been an error reading replacements: "+ error.message);
     }
 }
