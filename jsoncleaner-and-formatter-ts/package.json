@@ -20,10 +20,42 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "wjsoncleaner.cleanJson",
-				"title": "WJC - Clean Json"
+				"command": "jsoncleaner.cleanJson",
+				"title": "JC - Clean Json"
+			}
+		],
+		"configuration":[
+			{
+				"title": "JC(JsonCleaner)",
+				"properties": {
+					"wjc.textReplacments":{
+						"description": "List of text replacements to do on cleaning process:",
+						"scope": "application",
+						"editPresentation": "multilineText",
+						"type":"object",
+						"default":{
+							"replacements":{
+								"///*" : "*",
+								"///\"" : "\"",
+								"//\"" : "\"",
+								"/\"" : "\"",
+								"\"{" : "{",
+								"}\"" : "}",
+								"\"[" : "[",
+								"]\"" : "]",
+								"///r///n" : " ",
+								"///n" : " ",
+								"//r//n" : " ",
+								"//n" : " ",
+								"/r/n" : " ",
+								"/n" : " "
+							}
+						}
+					}
+				}
 			}
 		]
+	
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run esbuild-base -- --minify",
