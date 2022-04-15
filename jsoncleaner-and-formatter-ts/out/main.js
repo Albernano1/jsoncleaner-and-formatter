@@ -1,1 +1,136 @@
-var g=Object.create;var i=Object.defineProperty;var m=Object.getOwnPropertyDescriptor;var u=Object.getOwnPropertyNames;var v=Object.getPrototypeOf,A=Object.prototype.hasOwnProperty;var d=e=>i(e,"__esModule",{value:!0});var f=(e,l)=>{for(var n in l)i(e,n,{get:l[n],enumerable:!0})},p=(e,l,n,r)=>{if(l&&typeof l=="object"||typeof l=="function")for(let t of u(l))!A.call(e,t)&&(n||t!=="default")&&i(e,t,{get:()=>l[t],enumerable:!(r=m(l,t))||r.enumerable});return e},w=(e,l)=>p(d(i(e!=null?g(v(e)):{},"default",!l&&e&&e.__esModule?{get:()=>e.default,enumerable:!0}:{value:e,enumerable:!0})),e),x=(e=>(l,n)=>e&&e.get(l)||(n=p(d({}),l,1),e&&e.set(l,n),n))(typeof WeakMap!="undefined"?new WeakMap:0);var J={};f(J,{activate:()=>h,deactivate:()=>C});var o=w(require("vscode")),a;function h(e){console.log('Congratulations, your extension "wjsoncleaner" is now active!');let l=o.commands.registerCommand("wjsoncleaner.helloWorld",()=>{o.window.showInformationMessage("Hello World from WJsonCleaner!")});e.subscriptions.push(l);let n=o.commands.registerCommand("wjsoncleaner.cleanJson",()=>{E(),b(),o.window.showInformationMessage(" Cleaning Json File ")});e.subscriptions.push(n)}function C(){}function E(){a=o.window.activeTextEditor,!!a}function b(){if(!a)return;let e=a.document.getText(),l=RegExp(/\/https[\S]*\/,/),n=e.match(l);if(!n)return;n.length>=1&&n.forEach(c=>{let s=c.replace(RegExp(/\//),'"');s=s.substring(0,s.length-1)+'",',e=e.replace(c,s)}),e=e.replaceAll("///*","*"),e=e.replaceAll('///"','"'),e=e.replaceAll('//"','"'),e=e.replaceAll('/"','"'),e=e.replaceAll('"{',"{"),e=e.replaceAll('}"',"}"),e=e.replaceAll('"[',"["),e=e.replaceAll(']"',"}"),e=e.replaceAll("///r///n"," "),e=e.replaceAll("///n"," "),e=e.replaceAll("//r//n"," "),e=e.replaceAll("//n"," "),e=e.replaceAll("/r/n"," "),e=e.replaceAll("/n"," ");let r=new o.Range(0,0,a.document.lineCount,0),t=a.document.validateRange(r);a.edit(c=>{c.replace(t,e)})}module.exports=x(J);0&&(module.exports={activate,deactivate});
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __reExport = (target, module2, copyDefault, desc) => {
+  if (module2 && typeof module2 === "object" || typeof module2 === "function") {
+    for (let key of __getOwnPropNames(module2))
+      if (!__hasOwnProp.call(target, key) && (copyDefault || key !== "default"))
+        __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
+  }
+  return target;
+};
+var __toESM = (module2, isNodeMode) => {
+  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", !isNodeMode && module2 && module2.__esModule ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
+};
+var __toCommonJS = /* @__PURE__ */ ((cache) => {
+  return (module2, temp) => {
+    return cache && cache.get(module2) || (temp = __reExport(__markAsModule({}), module2, 1), cache && cache.set(module2, temp), temp);
+  };
+})(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
+
+// src/extension.ts
+var extension_exports = {};
+__export(extension_exports, {
+  activate: () => activate,
+  deactivate: () => deactivate
+});
+var vscode2 = __toESM(require("vscode"));
+
+// src/loadReplacements.ts
+var path = __toESM(require("path"));
+var fs = __toESM(require("fs"));
+var vscode = __toESM(require("vscode"));
+function loadReplacements(context) {
+  try {
+    let fullFilePath = context.asAbsolutePath(path.join("resources", "replacements.txt"));
+    let fileContent = fs.readFileSync(fullFilePath, "utf8");
+    let configuredReplacements = "";
+    if (vscode.workspace.getConfiguration("JC(WayletJsonCleaner).properties").has("jc.textReplacments")) {
+      configuredReplacements = vscode.workspace.getConfiguration("JC(WayletJsonCleaner).properties").get("jc.textReplacments");
+    } else {
+      throw new Error("Nothing to retrieve from extension configuration");
+    }
+    let replacements = [];
+    let replacementsObjetc = {};
+    if (configuredReplacements !== "") {
+      replacementsObjetc = JSON.parse(String(configuredReplacements));
+    }
+    Object.entries(replacementsObjetc).forEach((propertie) => {
+      replacements.push([propertie[0], propertie[1]]);
+    });
+    return replacements;
+  } catch (error) {
+    console.log("JC - There's been an error reading replacements: " + error.message);
+    throw new Error("There's been an error reading replacements: " + error.message);
+  }
+}
+
+// src/extension.ts
+var activeTextEditor;
+function activate(context) {
+  console.log('Congratulations, your extension "jsoncleaner" is now active!');
+  let disposable = vscode2.commands.registerCommand("jsoncleaner.helloWorld", () => {
+    vscode2.window.showInformationMessage("Hello World from jsoncleaner TS!");
+  });
+  context.subscriptions.push(disposable);
+  let disposableCleanJson = vscode2.commands.registerCommand("jsoncleaner.cleanJson", () => {
+    getActiveTextEditorAndFile(context);
+    cleanJson(context);
+    vscode2.window.showInformationMessage(" Cleaning Json File ");
+  });
+  context.subscriptions.push(disposableCleanJson);
+}
+function deactivate() {
+}
+function getActiveTextEditorAndFile(context) {
+  activeTextEditor = vscode2.window.activeTextEditor;
+  if (!activeTextEditor) {
+    return;
+  }
+}
+function cleanJson(context) {
+  try {
+    let replacements;
+    replacements = loadReplacements(context);
+    if (!vscode2.window.activeTextEditor) {
+      throw new Error("No active text editor in use");
+    }
+    let text = vscode2.window.activeTextEditor.document.getText();
+    text = htmltextModification(context, text);
+    replacements.forEach((element) => {
+      text = text.replaceAll(element[0], element[1]);
+    });
+    let range = new vscode2.Range(0, 0, vscode2.window.activeTextEditor.document.lineCount, 0);
+    range = vscode2.window.activeTextEditor.document.validateRange(range);
+    vscode2.window.activeTextEditor.edit((editBuilder) => {
+      editBuilder.replace(range, text);
+    });
+    vscode2.window.showInformationMessage(" Execution Completed ");
+  } catch (error) {
+    console.log("JC - There has been an error triying to clean the file: " + error.message);
+    vscode2.window.showErrorMessage(" There has been an error triying to clean the file: " + error.message);
+  }
+}
+function htmltextModification(context, text) {
+  let htmlregex1 = RegExp(/\/https[\S]*\/,/);
+  let matches = text.match(htmlregex1);
+  if (!matches) {
+    vscode2.window.showInformationMessage(" No matches to modify ");
+    return "";
+  } else if (matches.length >= 1) {
+    matches.forEach((element) => {
+      let modified = element.replace(RegExp(/\//), '"');
+      modified = modified.substring(0, modified.length - 1) + '",';
+      text = text.replace(element, modified);
+    });
+  } else {
+    vscode2.window.showInformationMessage(" No matches to modify ");
+    return "";
+  }
+  return text;
+}
+module.exports = __toCommonJS(extension_exports);
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  activate,
+  deactivate
+});
+//# sourceMappingURL=main.js.map

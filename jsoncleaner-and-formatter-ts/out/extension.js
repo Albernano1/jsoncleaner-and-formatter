@@ -16,17 +16,17 @@ let activeTextEditor;
 function activate(context) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "wjsoncleaner" is now active!');
+    console.log('Congratulations, your extension "jsoncleaner" is now active!');
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('wjsoncleaner.helloWorld', () => {
+    let disposable = vscode.commands.registerCommand('jsoncleaner.helloWorld', () => {
         // The code you place here will be executed every time your command is executed
         // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World from WJsonCleaner TS!');
+        vscode.window.showInformationMessage('Hello World from jsoncleaner TS!');
     });
     context.subscriptions.push(disposable);
-    let disposableCleanJson = vscode.commands.registerCommand('wjsoncleaner.cleanJson', () => {
+    let disposableCleanJson = vscode.commands.registerCommand('jsoncleaner.cleanJson', () => {
         // The code you place here will be executed every time your command is executed
         getActiveTextEditorAndFile(context);
         cleanJson(context);
@@ -81,7 +81,7 @@ function cleanJson(context) {
         vscode.window.showInformationMessage(' Execution Completed ');
     }
     catch (error) {
-        console.log("WJC - There has been an error triying to clean the file: " + error.message);
+        console.log("JC - There has been an error triying to clean the file: " + error.message);
         vscode.window.showErrorMessage(" There has been an error triying to clean the file: " + error.message);
     }
 }

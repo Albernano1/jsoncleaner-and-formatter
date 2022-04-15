@@ -15,8 +15,8 @@ export function loadReplacements(context: vscode.ExtensionContext): string[][] {
 
         let configuredReplacements: String|undefined ="";
         
-        if (vscode.workspace.getConfiguration('JC(WayletJsonCleaner).properties').has('jc.textReplacments')){
-            configuredReplacements = vscode.workspace.getConfiguration('JC(WayletJsonCleaner).properties').get('jc.textReplacments');
+        if (vscode.workspace.getConfiguration('JC(JsonCleaner).properties').has('jc.textReplacments')){
+            configuredReplacements = vscode.workspace.getConfiguration('JC(JsonCleaner).properties').get('jc.textReplacments');
         }else{
             throw new Error("Nothing to retrieve from extension configuration");
         }

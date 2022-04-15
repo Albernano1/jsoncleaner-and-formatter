@@ -13,7 +13,6 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:jsoncleaner.helloWorld",
 		"onCommand:jsoncleaner.cleanJson"
 	],
 	"main": "./out/extension.js",
