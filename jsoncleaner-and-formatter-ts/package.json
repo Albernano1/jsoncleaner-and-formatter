@@ -27,9 +27,9 @@
 			{
 				"title": "JC(JsonCleaner)",
 				"properties": {
-					"wjc.textReplacments":{
+					"jc.textReplacments":{
 						"description": "List of text replacements to do on cleaning process:",
-						"scope": "application",
+						"scope": 1,
 						"editPresentation": "multilineText",
 						"type":"object",
 						"default":{

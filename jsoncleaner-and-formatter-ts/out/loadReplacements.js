@@ -11,17 +11,15 @@ function loadReplacements(context) {
     try {
         let fullFilePath = context.asAbsolutePath(path.join('resources', 'replacements.txt'));
         let fileContent = fs.readFileSync(fullFilePath, 'utf8');
-        let configuredReplacements = "";
-        if (vscode.workspace.getConfiguration('JC(WayletJsonCleaner).properties').has('jc.textReplacments')) {
-            configuredReplacements = vscode.workspace.getConfiguration('JC(WayletJsonCleaner).properties').get('jc.textReplacments');
-        }
-        else {
-            throw new Error("Nothing to retrieve from extension configuration");
-        }
+        let configuredReplacements;
+        configuredReplacements = vscode.workspace.getConfiguration('jc.textReplacments').get('replacements', null);
         let replacements = [];
         let replacementsObjetc = {};
-        if (configuredReplacements !== "") {
+        if (configuredReplacements !== null) {
             replacementsObjetc = JSON.parse(String(configuredReplacements));
+        }
+        else {
+            throw new Error("Couldn't retrieve value from configuration");
         }
         // fileContent.split('\r\n').forEach(line => {
         //     let selectedPard: string[] = line.split(';');

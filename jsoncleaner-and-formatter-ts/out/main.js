@@ -42,16 +42,14 @@ function loadReplacements(context) {
   try {
     let fullFilePath = context.asAbsolutePath(path.join("resources", "replacements.txt"));
     let fileContent = fs.readFileSync(fullFilePath, "utf8");
-    let configuredReplacements = "";
-    if (vscode.workspace.getConfiguration("JC(WayletJsonCleaner).properties").has("jc.textReplacments")) {
-      configuredReplacements = vscode.workspace.getConfiguration("JC(WayletJsonCleaner).properties").get("jc.textReplacments");
-    } else {
-      throw new Error("Nothing to retrieve from extension configuration");
-    }
+    let configuredReplacements;
+    configuredReplacements = vscode.workspace.getConfiguration("jc.textReplacments").get("replacements", null);
     let replacements = [];
     let replacementsObjetc = {};
-    if (configuredReplacements !== "") {
+    if (configuredReplacements !== null) {
       replacementsObjetc = JSON.parse(String(configuredReplacements));
+    } else {
+      throw new Error("Couldn't retrieve value from configuration");
     }
     Object.entries(replacementsObjetc).forEach((propertie) => {
       replacements.push([propertie[0], propertie[1]]);
@@ -67,16 +65,13 @@ function loadReplacements(context) {
 var activeTextEditor;
 function activate(context) {
   console.log('Congratulations, your extension "jsoncleaner" is now active!');
-  let disposable = vscode2.commands.registerCommand("jsoncleaner.helloWorld", () => {
-    vscode2.window.showInformationMessage("Hello World from jsoncleaner TS!");
-  });
-  context.subscriptions.push(disposable);
   let disposableCleanJson = vscode2.commands.registerCommand("jsoncleaner.cleanJson", () => {
     getActiveTextEditorAndFile(context);
     cleanJson(context);
     vscode2.window.showInformationMessage(" Cleaning Json File ");
   });
   context.subscriptions.push(disposableCleanJson);
+  console.log("Command registered");
 }
 function deactivate() {
 }

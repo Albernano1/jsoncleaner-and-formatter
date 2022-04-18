@@ -20,12 +20,6 @@ function activate(context) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('jsoncleaner.helloWorld', () => {
-        // The code you place here will be executed every time your command is executed
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World from jsoncleaner TS!');
-    });
-    context.subscriptions.push(disposable);
     let disposableCleanJson = vscode.commands.registerCommand('jsoncleaner.cleanJson', () => {
         // The code you place here will be executed every time your command is executed
         getActiveTextEditorAndFile(context);
@@ -34,6 +28,7 @@ function activate(context) {
         vscode.window.showInformationMessage(' Cleaning Json File ');
     });
     context.subscriptions.push(disposableCleanJson);
+    console.log('Command registered');
 }
 exports.activate = activate;
 // this method is called when your extension is deactivated
