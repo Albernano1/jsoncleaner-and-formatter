@@ -13,25 +13,10 @@ export function loadReplacements(context: vscode.ExtensionContext): string[][] {
         let fullFilePath: string = context.asAbsolutePath(path.join('resources', 'replacements.txt'));
         let fileContent = fs.readFileSync(fullFilePath,'utf8');
 
-        let configuredReplacements: string|null;
-        
-        configuredReplacements = vscode.workspace.getConfiguration('jc.textReplacments').get('replacements',null);
-
+        let configuredReplacements: Object = vscode.workspace.getConfiguration('jc').get('textReplacements',{});
         let replacements: string[][] = [];
-        let replacementsObjetc: Object = {};
 
-        if(configuredReplacements !== null){
-            replacementsObjetc = JSON.parse(String(configuredReplacements.get()));
-        }else{
-            throw new Error("Couldn't retrieve value from configuration");
-        }
-
-        // fileContent.split('\r\n').forEach(line => {
-        //     let selectedPard: string[] = line.split(';');
-        //     replacements.push([selectedPard[0], selectedPard[1]]);
-        // });
-
-        Object.entries(replacementsObjetc).forEach(propertie =>{
+        Object.entries(configuredReplacements).forEach(propertie =>{
             replacements.push([propertie[0], propertie[1]]);
         });
 
@@ -42,8 +27,3 @@ export function loadReplacements(context: vscode.ExtensionContext): string[][] {
         throw new Error("There's been an error reading replacements: "+ error.message);
     }
 }
-
-
-// module.exports = {
-//     loadReplacements: loadReplacements
-//   };

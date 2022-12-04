@@ -11,21 +11,9 @@ function loadReplacements(context) {
     try {
         let fullFilePath = context.asAbsolutePath(path.join('resources', 'replacements.txt'));
         let fileContent = fs.readFileSync(fullFilePath, 'utf8');
-        let configuredReplacements;
-        configuredReplacements = vscode.workspace.getConfiguration('jc.textReplacments').get('replacements', null);
+        let configuredReplacements = vscode.workspace.getConfiguration('jc').get('textReplacements', {});
         let replacements = [];
-        let replacementsObjetc = {};
-        if (configuredReplacements !== null) {
-            replacementsObjetc = JSON.parse(String(configuredReplacements));
-        }
-        else {
-            throw new Error("Couldn't retrieve value from configuration");
-        }
-        // fileContent.split('\r\n').forEach(line => {
-        //     let selectedPard: string[] = line.split(';');
-        //     replacements.push([selectedPard[0], selectedPard[1]]);
-        // });
-        Object.entries(replacementsObjetc).forEach(propertie => {
+        Object.entries(configuredReplacements).forEach(propertie => {
             replacements.push([propertie[0], propertie[1]]);
         });
         return replacements;
@@ -36,7 +24,4 @@ function loadReplacements(context) {
     }
 }
 exports.loadReplacements = loadReplacements;
-// module.exports = {
-//     loadReplacements: loadReplacements
-//   };
 //# sourceMappingURL=loadReplacements.js.map

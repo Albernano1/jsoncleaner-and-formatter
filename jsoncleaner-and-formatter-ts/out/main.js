@@ -42,16 +42,9 @@ function loadReplacements(context) {
   try {
     let fullFilePath = context.asAbsolutePath(path.join("resources", "replacements.txt"));
     let fileContent = fs.readFileSync(fullFilePath, "utf8");
-    let configuredReplacements;
-    configuredReplacements = vscode.workspace.getConfiguration("jc.textReplacments").get("replacements", null);
+    let configuredReplacements = vscode.workspace.getConfiguration("jc").get("textReplacements", {});
     let replacements = [];
-    let replacementsObjetc = {};
-    if (configuredReplacements !== null) {
-      replacementsObjetc = JSON.parse(String(configuredReplacements));
-    } else {
-      throw new Error("Couldn't retrieve value from configuration");
-    }
-    Object.entries(replacementsObjetc).forEach((propertie) => {
+    Object.entries(configuredReplacements).forEach((propertie) => {
       replacements.push([propertie[0], propertie[1]]);
     });
     return replacements;
@@ -95,9 +88,9 @@ function cleanJson(context) {
     });
     let range = new vscode2.Range(0, 0, vscode2.window.activeTextEditor.document.lineCount, 0);
     range = vscode2.window.activeTextEditor.document.validateRange(range);
-    vscode2.window.activeTextEditor.edit((editBuilder) => {
-      editBuilder.replace(range, text);
-    });
+    let edit = new vscode2.WorkspaceEdit();
+    edit.replace(vscode2.window.activeTextEditor.document.uri, range, text);
+    vscode2.workspace.applyEdit(edit);
     vscode2.window.showInformationMessage(" Execution Completed ");
   } catch (error) {
     console.log("JC - There has been an error triying to clean the file: " + error.message);
@@ -109,7 +102,6 @@ function htmltextModification(context, text) {
   let matches = text.match(htmlregex1);
   if (!matches) {
     vscode2.window.showInformationMessage(" No matches to modify ");
-    return "";
   } else if (matches.length >= 1) {
     matches.forEach((element) => {
       let modified = element.replace(RegExp(/\//), '"');
@@ -118,7 +110,6 @@ function htmltextModification(context, text) {
     });
   } else {
     vscode2.window.showInformationMessage(" No matches to modify ");
-    return "";
   }
   return text;
 }

@@ -25,30 +25,30 @@
 		],
 		"configuration":[
 			{
+				"id":"replacementValues",
 				"title": "JC(JsonCleaner)",
+				"order": 1,
 				"properties": {
-					"jc.textReplacments":{
+					"jc.textReplacements":{
+						"order": 1,
 						"description": "List of text replacements to do on cleaning process:",
-						"scope": 1,
 						"editPresentation": "multilineText",
 						"type":"object",
 						"default":{
-							"replacements":{
-								"///*" : "*",
-								"///\"" : "\"",
-								"//\"" : "\"",
-								"/\"" : "\"",
-								"\"{" : "{",
-								"}\"" : "}",
-								"\"[" : "[",
-								"]\"" : "]",
-								"///r///n" : " ",
-								"///n" : " ",
-								"//r//n" : " ",
-								"//n" : " ",
-								"/r/n" : " ",
-								"/n" : " "
-							}
+							"///*" : "*",
+							"///\"" : "\"",
+							"//\"" : "\"",
+							"/\"" : "\"",
+							"\"{" : "{",
+							"}\"" : "}",
+							"\"[" : "[",
+							"]\"" : "]",
+							"///r///n" : " ",
+							"///n" : " ",
+							"//r//n" : " ",
+							"//n" : " ",
+							"/r/n" : " ",
+							"/n" : " "
 						}
 					}
 				}

@@ -91,9 +91,9 @@ function cleanJson(context: vscode.ExtensionContext) {
 		let range: vscode.Range = new vscode.Range(0,0,vscode.window.activeTextEditor.document.lineCount, 0);
 		range = vscode.window.activeTextEditor.document.validateRange(range);
 		
-		vscode.window.activeTextEditor.edit(editBuilder => {
-			editBuilder.replace(range, text);
-		});
+		let edit = new vscode.WorkspaceEdit();
+		edit.replace(vscode.window.activeTextEditor.document.uri,range,text);
+		vscode.workspace.applyEdit(edit);
 
 		vscode.window.showInformationMessage(' Execution Completed ');
 
@@ -115,8 +115,6 @@ function htmltextModification(context: vscode.ExtensionContext, text: string):st
 	if (!matches) {
 		//Matches Null, warning and end
 		vscode.window.showInformationMessage(' No matches to modify ');
-		return '';
-
 	}else if (matches.length >= 1) {
 		matches.forEach(element => {
 			//First and last char are going to be replaced by ""
@@ -128,7 +126,6 @@ function htmltextModification(context: vscode.ExtensionContext, text: string):st
 	}else{
 		//No matches, warning and end
 		vscode.window.showInformationMessage(' No matches to modify ');
-		return '';
 	}
 
 	return text;

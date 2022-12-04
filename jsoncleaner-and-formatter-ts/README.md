@@ -12,11 +12,11 @@ None
 
 ## Extension Settings
 
-none
+The replacement values, can be found in extension settings
 
 ## Known Issues
 
-Let me know in my email address alberto.sanchez.merino@emeal.nttdata.com
+Let me know in my email address albernano1@gmail.com
 
 ## Release Notes
 
@@ -27,6 +27,6 @@ Initial release of projecy
 -----------------------------------------------------------------------------------------------------------
 ### For more information
 
-* Contact me in my email : alberto.sanchez.merino@emeal.nttdata.com
+* Contact me in my email : albernano1@gmail.com
 
 **Enjoy!**
