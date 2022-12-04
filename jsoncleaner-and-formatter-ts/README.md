@@ -22,7 +22,15 @@ Let me know in my email address albernano1@gmail.com
 
 ### 1.0.0
 
-Initial release of projecy
+Initial release of project
+
+### 1.0.1
+
+Internal fixes
+
+### 1.0.2
+
+Currently working as per new standards and configurable replacements!
 
 -----------------------------------------------------------------------------------------------------------
 ### For more information
