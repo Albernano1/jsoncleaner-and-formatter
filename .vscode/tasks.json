@@ -1,0 +1,24 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "esbuild",
+			"path": "jsoncleaner-and-formatter-ts",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: esbuild - jsoncleaner-and-formatter-ts",
+			"detail": "npm run esbuild-base -- --sourcemap"
+		},
+		{
+			"type": "npm",
+			"script": "vscode:prepublish",
+			"path": "jsoncleaner-and-formatter-ts",
+			"problemMatcher": [
+				"$eslint-compact"
+			],
+			"label": "npm: vscode:prepublish - jsoncleaner-and-formatter-ts",
+			"detail": "npm run esbuild-base -- --minify"
+		}
+	]
+}

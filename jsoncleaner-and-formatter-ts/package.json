@@ -3,7 +3,7 @@
 	"displayName": "JsonCleaner",
 	"description": "This extension aims at easily cleaning and formatting JSON files we may found daily working on our project.",
 	"icon": "resources/images/iconito.png",
-	"version": "1.1.0",
+	"version": "1.0.2",
 	"publisher": "Alberto Sánchez Merino",
 	"repository": "https://github.com/Albernano1/jsoncleaner-and-formatter.git",
 	"engines": {
